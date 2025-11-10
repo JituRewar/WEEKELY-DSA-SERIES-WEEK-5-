@@ -1,0 +1,38 @@
+Week 5 — Day 1: LeetCode 46 — Permutations
+
+Problem Summary
+
+Given a collection of distinct integers, return all possible permutations.
+Approach
+
+Use backtracking (depth-first search) to build permutations in-place by swapping. At each position idx we try every candidate from idx to n-1, swap it into place, recurse for idx+1, then backtrack by swapping back.
+
+This approach is simple, efficient, and commonly used for permutation generation.
+
+Time & Space Complexity
+
+Time: O(n * n!) — there are n! permutations and copying each takes O(n).
+
+Space: O(n) recursion depth plus output storage O(n!).
+
+File: permutations.cpp
+class Solution {
+public:
+void permu(vector<int>& nums,int idx, vector<vector<int>> &ans){
+    if(idx==nums.size()){
+        ans.push_back({nums});
+        return;
+    }
+    for(int i=idx;i<nums.size();i++){
+        swap(nums[idx],nums[i]);
+        permu(nums,idx+1,ans);
+        swap(nums[idx],nums[i]);
+    }
+}
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> ans;
+        
+        permu(nums,0,ans);
+        return ans;
+    }
+};
