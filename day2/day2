@@ -1,0 +1,62 @@
+# Day 2 — LeetCode 51: N-Queens
+
+
+**Problem (short):** Place `n` queens on an `n x n` chessboard so that no two queens attack each other. Return all distinct solutions. Each solution contains an `n`-element list of strings representing the board (`'Q'` for queen, `'.'` for empty).
+
+
+**Approach:** Backtracking with pruning.
+
+
+- Track columns occupied, and both diagonals (r - c) and (r + c) to ensure O(1) checks.
+- Place queens row-by-row. For each row try placing a queen in each column not under attack, then recurse to next row and backtrack.
+
+
+**Time complexity:** Exponential. Exact upper bound is complicated; worst-case around `O(n!)` with pruning.
+
+
+**Space complexity:** `O(n)` extra for the state arrays plus space for building solutions.
+
+
+**Files:**
+- `N-Queens.cpp` — C++ solution
+  class Solution {
+public:
+bool isSafe(vector<string> &board,int row,int column,int n){
+    //horigontal
+    for(int j=0;j<n;j++){
+        if(board[row][j]=='Q') return false;
+    }
+    //vertical
+    for(int j=0;j<n;j++){
+        if(board[j][column]=='Q') return false; 
+    }
+    //primary diagonal
+    for(int i=row,j=column;i>=0 && j>=0;i--,j--){
+        if(board[i][j]=='Q') return false;
+    }
+    //secondary diagonal
+    for(int i=row,j=column;i>=0 && j<n;i--,j++){
+        if(board[i][j]=='Q') return false;
+    }
+    return true;
+}
+    void queen(vector<string> &board,vector<vector<string>> &ans,int n,int row){
+        if(row==n){
+            ans.push_back({board});
+            return;
+        }
+        for(int j=0;j<n;j++){
+           if(isSafe(board,row,j,n)){
+            board[row][j]='Q';
+            queen(board,ans,n,row+1);
+            board[row][j]='.';
+           }
+        }
+    }
+    vector<vector<string>> solveNQueens(int n) {
+        vector<string> board(n,string(n,'.'));
+        vector<vector<string>> ans;
+       queen(board,ans,n,0);
+       return ans;
+    }
+};
