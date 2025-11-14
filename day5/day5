@@ -1,0 +1,63 @@
+DSA Series — Week 5 | Day 5 — LeetCode 39: Combination Sum
+
+Problem (short)
+
+Given an array of distinct positive integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may use the same number from candidates an unlimited number of times. The combinations can be returned in any order.
+
+Note: The input candidates contains distinct integers.
+
+Example
+Input: candidates = [2,3,6,7], target = 7
+Output: [[7],[2,2,3]]
+Algorithm / Approach (Backtracking)
+
+Sort candidates (optional but useful to prune branches).
+
+Use backtracking to build combinations:
+
+Keep a current combination path and a running sum or remaining target.
+
+At each step, iterate i from current index to n-1 (allowing reuse of the same index), choose candidates[i], and recurse with updated remaining target target - candidates[i].
+
+If remaining target becomes 0, we found a valid combination — add a copy of path to results.
+
+If remaining target < 0, prune and backtrack.
+
+To avoid duplicate combinations in different orders, always maintain the iteration starting from the current index (not from 0).
+  cpp```
+  class Solution {
+public:
+    set<vector<int>> s;
+    void getAllCombination(vector<int>& arr,vector<vector<int>> &ans,vector<int> &combin,int target,int i){
+        if(target==0){
+            if(s.find(combin)==s.end()){
+                ans.push_back(combin);
+                s.insert(combin);
+
+            }
+            
+            return;
+        }
+        if(i==arr.size() || target<0){
+            return;
+        }
+
+combin.push_back(arr[i]);
+//single time
+getAllCombination(arr,ans,combin,target-arr[i],i+1);
+//multiple time
+getAllCombination(arr,ans,combin,target-arr[i],i);
+//exclude 
+combin.pop_back();
+getAllCombination(arr,ans,combin,target,i+1);
+
+
+    }
+
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+         vector<vector<int>> ans;
+         vector<int> combin;
+         getAllCombination(candidates,ans,combin,target,0);
+         return ans;
+    }
+};
