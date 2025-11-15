@@ -1,0 +1,66 @@
+# 📘 Week 5 Day 6 – Palindrome Partitioning (LeetCode 131)
+
+## 🔹 Problem Statement
+Given a string `s`, partition it such that every substring of the partition is a **palindrome**.  
+Return *all* possible palindrome partitioning of `s`.
+
+This problem is a classic application of **recursion + backtracking**.
+
+---
+
+## 🔹 Approach
+
+### ✔ Backtracking
+1. Start from index 0 and try all possible substrings.  
+2. For each substring, check if it is a **palindrome**.  
+3. If yes → include it → recursively process the remaining string.  
+4. When the string becomes empty, store the formed partition.  
+5. Use backtracking to explore all possible valid partitions.
+
+---
+
+## 🔹 Time & Space Complexity
+| Aspect | Complexity |
+|--------|-----------|
+| Time   | **O(n · 2ⁿ)** — due to generating all possible partitions |
+| Space  | **O(n)** recursion stack + result storage |
+
+---
+
+## 🔹 My Learnings
+- Improved understanding of **recursion tree exploration**  
+- Learned how backtracking helps undo choices  
+- Palindrome checking is crucial for
+```cpp
+  class Solution {
+public:
+bool ispallendrome(string s)
+{
+    string s2=s;
+    reverse(s2.begin(),s2.end());
+    return s==s2;
+}
+   void allPart(vector<vector<string>> &ans,vector<string> &partation,string s){
+        if(s.size()==0){
+            ans.push_back(partation);
+            return;
+        }
+        for(int i=0;i<s.size();i++){
+            string part=s.substr(0,i+1);
+            if(ispallendrome(part)){
+                partation.push_back(part);
+                allPart(ans,partation,s.substr(i+1));
+                partation.pop_back();
+            }
+
+
+        }
+    }
+
+    vector<vector<string>> partition(string s) {
+        vector<vector<string>> ans;
+        vector<string> partation;
+        allPart(ans,partation,s);
+        return ans;
+    }
+};
