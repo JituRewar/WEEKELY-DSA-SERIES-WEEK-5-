@@ -1,0 +1,33 @@
+
+
+### Day 7 — LeetCode 100: Same Tree
+
+**Problem (brief):** Given two binary trees, write a function to check if they are the same. Two binary trees are considered the same if they are structurally identical and the nodes have the same value.
+
+**Approach:** Use recursion to compare corresponding nodes of both trees. At each step:
+
+* If both nodes are `nullptr`, they are the same (return `true`).
+* If one is `nullptr` and the other isn't, return `false`.
+* If both are non-null, compare `val` and recursively check left and right subtrees.
+
+**Time Complexity:** O(min(n, m)) — where n and m are the number of nodes in the two trees; in the worst case both trees have the same size, so O(n).
+
+**Space Complexity:** O(h) due to recursion stack, where `h` is the height of the tree.
+
+**Files:**
+
+* `solution.cpp` — C++ implementation.
+
+
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if(p==NULL && q==NULL){
+            return true;
+        }
+        if(p==NULL || q==NULL || p->val!=q->val){
+            return false;
+        }
+      return isSameTree(p->left,q->left) && isSameTree(p->right,q->right);
+    }
+};
